@@ -60,6 +60,19 @@ public class CommunicationThread extends Thread {
                 requestResult = data.get(address);
                 
                 // Parse time and check if one minute passed here ...
+                boolean firstTime = true;
+                StringBuilder sb = new StringBuilder();
+                for(int i = 0; i < requestResult.length(); ++i) {
+                	if(requestResult.charAt(i) == ':') {
+                		if(!firstTime) {
+                			continue;
+                		}
+                		
+                		sb.append(requestResult.charAt(i));
+                	}
+                }
+                
+                String time = sb.toString();
             } else {
                 serverThread.setData(socketAddress, pageSourceCode);
                 requestResult = pageSourceCode;
