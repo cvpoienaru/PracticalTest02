@@ -49,17 +49,18 @@ public class CommunicationThread extends Thread {
             String address = socketAddress + socketPort;
             String requestResult = null;
             
+            Log.i(Constants.TAG, "[COMMUNICATION THREAD] Getting the information from the webservice...");
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(Constants.WEB_SERVICE_ADDRESS);
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String pageSourceCode = httpClient.execute(httpGet, responseHandler);
+            
             if (data.containsKey(address)) {
                 Log.i(Constants.TAG, "[COMMUNICATION THREAD] Getting the information from the cache...");
                 requestResult = data.get(address);
+                
+                // Parse time and check if one minute passed here ...
             } else {
-                Log.i(Constants.TAG, "[COMMUNICATION THREAD] Getting the information from the webservice...");
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet(Constants.WEB_SERVICE_ADDRESS);
-                
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-                String pageSourceCode = httpClient.execute(httpGet, responseHandler);
-                
                 serverThread.setData(socketAddress, pageSourceCode);
                 requestResult = pageSourceCode;
             }
